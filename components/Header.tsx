@@ -3,6 +3,7 @@ import Image from "next/image";
 import {NavLinks} from "@/constance";
 import AuthProviders from "@/components/AuthProviders";
 import {getCurrentUser} from "@/lib/session";
+import ProfileMenu from "@/components/ProfileMenu";
 
 
 const Header = async () => {
@@ -23,12 +24,11 @@ const Header = async () => {
                 <div className='flexCenter gap-4'>
                     {session?.user ? (
                         <>
-                            {session?.user?.image && (<Link href={`/profile/${session?.user?.id}`}>
-                                <Image src={session.user.image} alt={session.user.name} width={40} height={40}
-                                       className='rounded-full'/></Link>)}
+                            <ProfileMenu session={session}/>
                             <Link href='/create-project'>
                                 Share Work
                             </Link>
+
                         </>
                     ) : (
                         <AuthProviders/>
