@@ -7,6 +7,7 @@ import {categoryFilters} from "@/constance";
 import CustomMenu from "@/components/CustomMenu";
 import {useRouter} from "next/navigation";
 import Button from "@/components/Button";
+import {createNewProject, fetchToken} from "@/lib/actions";
 
 type Props = {
     type: string,
@@ -27,23 +28,26 @@ const ProjectForm = ({type, session, project}: Props) => {
         category: project?.category || ""
     })
 
-    const handleFormSubmit = (e: React.FormEvent) => {
+    const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setSubmitting(true)
+        const { token } = await fetchToken()
         try{
-            // if (type === "create") {
-            //     await createNewProject(form, session?.user?.id, token)
-            //
-            //     router.push("/")
-            // }
-            //
+            if (type === "create") {
+                await createNewProject(form, session?.user?.id, token)
+
+                router.push("/")
+            }
+
             // if (type === "edit") {
             //     await updateProject(form, project?.id as string, token)
             //
             //     router.push("/")
             // }
         } catch (error) {
-            
+            console.log(error)
+        } finally {
+            setSubmitting(false)
         }
     }
     const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
